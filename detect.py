@@ -1,8 +1,11 @@
 #this block identifies a face in a given picture by use of haarcascade defined in openCV
+import cv2,os
 import numpy as np
-import cv2
+from PIL import Image
+import pickle
+import sqlite3
 
-detector= cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+detector= cv2.CascadeClassifier('classifier/haarface.xml')
 cap = cv2.VideoCapture(0)
 
 while(True):
@@ -12,7 +15,7 @@ while(True):
     for (x,y,w,h) in faces:
         cv2.rectangle(img,(x,y),(x+w,y+h),(0,69,255),2)
 
-    cv2.imshow('frame',img)
+    cv2.imshow('detect face',img)
     if cv2.waitKey(1) & 0xFF == ord('p'):#press p to terminate the window
         break
 
