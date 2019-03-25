@@ -9,26 +9,25 @@ cam=cv2.VideoCapture(0)
 
 def insertOrUpdate(id,stdid,fname,lname,gender):
     conn=sqlite3.connect("face.db")
-    sql="SELECT * FROM user WHERE ID="+str(id)
+    sql="SELECT count(*) FROM user WHERE ID="+str(id)
     cursor=conn.execute(sql)
-    isRecordExist=0
-    for row in cursor:
-        isRecordExist=1
-        if(isRecordExist==1):
-            sql="UPDATE user SET STDID = ? WHERE ID = ?",(stdid, id)
-            sql="UPDATE user SET FNAME = ? WHERE ID = ?",(fname, id)
-            sql="UPDATE user SET LNAME = ? WHERE ID = ?",(lname, id)
-            sql="UPDATE user SET GENDER = ? WHERE ID = ?",(gender, id)
-            conn.execute(sql)
-            conn.commit()
-
-        else:
-            params = (id, stdid, fname, lname, gender)
-            conn.execute("INSERT INTO user(STDID, FNAME, LNAME, GENDER) VALUES(?, ?, ?, ?, ?)", params)
-            #sql="INSERT INTO user(ID,STDID,FNAME,LNAME,GENDER) values("+str(id)+","+str(stdid)+","+str(fname)+","+str(lname)+","+str(gender)+")"
-            #conn.execute(sql)
-            conn.commit()
-        conn.close()
+    data=cursor.fetchone()[0]
+    if data ==0:
+        sql="INSERT INTO user(ID,STDID,FNAME,LNAME,GENDER) values("+str(id)+","+str(stdid)+","+str(fname)+","+str(lname)+","+str(gender)+");"
+        conn.execute(sql)
+        conn.commit()
+    else:
+        sql="UPDATE user SET STDID = ? WHERE ID = ?;"
+        conn.execute(sql,(stdid, id))
+        sql="UPDATE user SET FNAME = ? WHERE ID = ?;"
+        conn.execute(sql,(fname, id))
+        sql="UPDATE user SET LNAME = ? WHERE ID = ?;"
+        conn.execute(sql,(lname, id))
+        sql="UPDATE user SET GENDER = ? WHERE ID = ?;"
+        conn.execute(sql,(gender, id))
+        #conn.execute(sql)
+        conn.commit()
+    conn.close()
 
 
 id=input('enter user id')
@@ -39,8 +38,9 @@ gender=input('enter your gender')
 
 insertOrUpdate(id,stdid,fname,lname,gender)
 
-folderName = fname                                                        # creating the person or user folder
-folderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dataset/"+folderName)
+#folderName = "user" +id                                                        # creating the person or user folder
+#folderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dataset/"+folderName)
+folderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dataset")
 if not os.path.exists(folderPath):
     os.makedirs(folderPath)
 
