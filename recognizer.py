@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import pickle
 import sqlite3
+import matplotlib.pyplot as plt
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('recognizer/traingData.yml')
@@ -31,14 +32,25 @@ while True:
         cv2.rectangle(im,(x,y),(x+w,y+h),(0,0,255),2)
         profile=getprofile(id)
         if(profile!=None):
-            cv2.cv.PutText(cv2.fromarray(im), str(profile[1]),(x,y+h+20),font, 255)
-            cv2.cv.PutText(cv2.fromarray(im), str(profile[2]),(x,y+h+50),font, 255)
-            cv2.cv.PutText(cv2.fromarray(im), str(profile[3]),(x,y+h+80),font, 255)
-            cv2.cv.PutText(cv2.fromarray(im), str(profile[4]),(x,y+h+100),font, 255)
-    cv2.imshow('im',im)
+            cv2.putText(im, str(profile[1]),(x+5+w,y+15),font,0.8, (255,0,0),2,cv2.LINE_AA)
+            cv2.putText(im, str(profile[2]),(x+5+w,y+45),font, 0.8,(255,0,0),2,cv2.LINE_AA)
+            cv2.putText(im, str(profile[3]),(x+5+w,y+75),font,0.8, (255,0,0),2,cv2.LINE_AA)
+            cv2.putText(im, str(profile[4]),(x+5+w,y+105),font, 0.8, (255,0,0),2,cv2.LINE_AA)
+    cv2.imshow('Machine',im)
     if cv2.waitKey(1) & 0xFF == ord('p'):#press p to terminate the window
         break
 
 
 cam.release()
 cv2.destroyAllWindows()
+
+
+
+
+#import cv2
+i#mport matplotlib.pyplot as plt
+
+#img = cv2.imread('img.jpg',0)
+
+#plt.imshow(img, cmap='gray')
+#plt.show()
