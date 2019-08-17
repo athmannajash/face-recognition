@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #creation of face models in the dataset
 import os
 import cv2
@@ -8,6 +9,7 @@ recognizer = cv2.face.LBPHFaceRecognizer_create()
 path='dataset'
 
 def getImagesWithID(path):
+    #identify directory where dataset is
     imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
     faces=[]
     IDs=[]
